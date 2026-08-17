@@ -1,0 +1,33 @@
+name: Feature request
+description: Propose an inspectable metric or responsible report improvement
+title: "feature: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Maintainer question
+      description: What decision-support question is not answered today?
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: Proposed public evidence and metric
+      description: Define computation, corrections, sample limits, and expected output.
+    validations:
+      required: true
+  - type: textarea
+    id: harm
+    attributes:
+      label: Misuse and bias risks
+      description: Explain false inferences and responsible-use controls.
+    validations:
+      required: true
+  - type: checkboxes
+    id: cleanroom
+    attributes:
+      label: Clean-room confirmation
+      options:
+        - label: This proposal contains only public specifications and synthetic examples.
+          required: true

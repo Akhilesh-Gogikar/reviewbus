@@ -1,15 +1,36 @@
 # ReviewBus
 
-> **Private incubation repository. Do not publish or announce yet.**
+[![CI](https://github.com/akigogikar/reviewbus/actions/workflows/ci.yml/badge.svg)](https://github.com/akigogikar/reviewbus/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/akigogikar/reviewbus)](LICENSE)
 
-ReviewBus turns public GitHub pull-request files and submitted reviews into a reproducible path ↔ reviewer map. It highlights review concentration and unowned paths, and emits suggestions—not governance decisions.
+ReviewBus turns public pull-request files and submitted reviews into reproducible path ↔ reviewer maps. It highlights review concentration and unowned paths while keeping every suggestion inspectable and correctable.
 
-## Quickstart: offline fixture
+**Status:** 0.1.0 alpha and private prelaunch. Historical public activity is not formal ownership, availability, employment, expertise, or performance.
 
-Requires Python 3.10+ and no third-party packages.
+## One-command usage
 
 ```sh
-cd /path/to/reviewbus
+reviewbus analyze --input examples/public_repo.json --json report.json --html report.html --codeowners CODEOWNERS.suggested
+```
+
+## Install from source
+
+ReviewBus supports Python 3.10–3.14 and has no runtime dependencies. CI tests every supported Python version on Linux and Python 3.14 on macOS and Windows.
+
+```sh
+git clone https://github.com/akigogikar/reviewbus.git
+cd reviewbus
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install .
+reviewbus --help
+```
+
+On Windows PowerShell, activate with `.venv\Scripts\Activate.ps1`.
+
+## Offline reproducible demo
+
+```sh
 python3 reviewbus.py analyze \
   --input examples/public_repo.json \
   --json /tmp/reviewbus.json \
@@ -17,25 +38,34 @@ python3 reviewbus.py analyze \
   --codeowners /tmp/CODEOWNERS.suggested
 ```
 
-The input is an offline, public-GitHub-shaped JSON bundle: `repository` plus `pull_requests`, each containing `files` and `reviews`. Output JSON and HTML intentionally omit generation timestamps and sort all entities for reproducibility.
+Expected output has three paths, two reviewers, and one unowned path. JSON and HTML omit generation timestamps and sort entities for reproducibility.
 
-## Optional public GitHub fetch
+## Optional public fetch
 
 ```sh
-# GITHUB_TOKEN is optional but improves public API rate limits.
-python3 reviewbus.py fetch octocat/Hello-World --limit 25 --output /tmp/github-snapshot.json
-python3 reviewbus.py analyze --input /tmp/github-snapshot.json --json /tmp/reviewbus.json --html /tmp/reviewbus.html
+# GITHUB_TOKEN is optional; when used, give it read-only public access.
+python3 reviewbus.py fetch owner/repository --limit 25 --output /tmp/public-snapshot.json
+python3 reviewbus.py analyze --input /tmp/public-snapshot.json --json /tmp/reviewbus.json --html /tmp/reviewbus.html
 ```
 
-The fetch command rejects repositories GitHub reports as private. It reads the optional token from `GITHUB_TOKEN` (or the environment variable named by `--token-env`) and never writes the token to an artifact.
+`fetch` rejects repositories reported as private. It reads the optional token from `GITHUB_TOKEN` (or the variable selected by `--token-env`) and never writes the token to an artifact. Fetching is bounded to one page of at most 100 items per endpoint.
 
-## Metrics
+## Metrics in 0.1
 
-- qualifying authority events: the latest `APPROVED` or `CHANGES_REQUESTED` review by a non-author on a pull request, attributed to each changed path;
-- path and repository bus factor: the minimum reviewers accounting for at least 80% of qualifying path-review events;
-- reviewer/path counts, approval/change-request counts, average response time, and UTC review-hour activity;
-- unowned paths with no qualifying events;
+- latest qualifying `APPROVED` or `CHANGES_REQUESTED` review by a non-author, attributed to each changed path;
+- minimum reviewers accounting for 80% of qualifying path-review events;
+- reviewer/path counts, approval/change-request counts, average response time, and UTC activity span;
+- paths with no qualifying event in the sample; and
 - deterministic top-two reviewer and CODEOWNERS suggestions.
+
+## Documentation and community
+
+- Design: [architecture](docs/ARCHITECTURE.md), [API stability](docs/API_STABILITY.md), [privacy](docs/PRIVACY.md), and [accessibility](docs/ACCESSIBILITY.md)
+- Use: [troubleshooting](docs/TROUBLESHOOTING.md) and [launch kit](docs/LAUNCH_KIT.md)
+- Direction: [roadmap](ROADMAP.md), [changelog](CHANGELOG.md), and [governance](GOVERNANCE.md)
+- Participate: [contributing](CONTRIBUTING.md), [code of conduct](CODE_OF_CONDUCT.md), and [support](SUPPORT.md)
+- Safety: [security policy](SECURITY.md), [scope](SCOPE.md), and [provenance](PROVENANCE.md)
+- Related optional projects: [ecosystem](ECOSYSTEM.md)
 
 ## Test
 
@@ -43,14 +73,10 @@ The fetch command rejects repositories GitHub reports as private. It reads the o
 python3 -m unittest discover -s tests -v
 ```
 
-## Limitations and responsible use
+## Honest limitations and non-goals
 
-- Historical public activity is not formal ownership, current availability, employment, expertise, or performance. Review and correct every suggestion.
-- Do not use this report to rank employees, shame maintainers, automatically assign work, or make governance decisions.
-- v0 is file-path based; renames, deleted paths, branch protection, teams, CODEOWNERS history, review dismissal, and merge permissions are not modeled.
-- GitHub fetch reads only one page (at most 100) of PRs, files, and reviews per endpoint. Large PRs can therefore be incomplete.
-- UTC activity span is descriptive timing evidence, not a timezone or location inference.
-- Unreviewed paths are “unowned” only within the analyzed sample.
-- v0 accepts public repositories only and makes no attempt to scan private repositories.
+One qualifying review is attributed to every changed path, so large pull requests carry more path events. v0 does not model renames, teams, branch protection, review dismissal, merge authority, or complete pagination. UTC activity is not a location inference. “Unowned” means only that the analyzed sample has no qualifying event.
 
-See [SCOPE.md](SCOPE.md) and [PROVENANCE.md](PROVENANCE.md). No public license is granted while this repository is private.
+Do not use ReviewBus for employee ranking, maintainer shaming, automatic assignment, issue closure, or governance decisions. Private repositories are out of scope.
+
+Released under the [MIT License](LICENSE).

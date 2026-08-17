@@ -264,14 +264,14 @@ def html_text(report: dict[str, object]) -> str:
     for row in report["paths"]:
         reviewers = ", ".join("@" + str(login) for login in row["suggested_reviewers"]) or "Needs owner"
         path_rows.append(
-            "<tr><td><code>" + html.escape(str(row["path"])) + "</code></td>"
+            "<tr><th scope=\"row\"><code>" + html.escape(str(row["path"])) + "</code></th>"
             + f"<td>{row['authority_events']}</td><td>{row['review_authority_bus_factor_80']}</td>"
             + f"<td>{html.escape(reviewers)}</td><td>{'yes' if row['unowned'] else 'no'}</td></tr>"
         )
     reviewer_rows = []
     for row in report["reviewers"]:
         reviewer_rows.append(
-            f"<tr><td>@{html.escape(str(row['login']))}</td><td>{row['authority_events']}</td>"
+            f"<tr><th scope=\"row\">@{html.escape(str(row['login']))}</th><td>{row['authority_events']}</td>"
             f"<td>{len(row['paths_reviewed'])}</td><td>{row['average_response_hours']}</td>"
             f"<td>{row['handoff_span_utc_hours']}</td></tr>"
         )
@@ -279,14 +279,14 @@ def html_text(report: dict[str, object]) -> str:
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ReviewBus report</title><style>
-body{{font:16px system-ui,sans-serif;max-width:1100px;margin:2rem auto;padding:0 1rem;color:#17202a}}table{{border-collapse:collapse;width:100%;margin:1rem 0}}th,td{{border:1px solid #ccd1d1;padding:.45rem;text-align:left}}th{{background:#eef2f3}}code,pre{{background:#f4f6f7;padding:.2rem .35rem;overflow:auto}}.warning{{border-left:.4rem solid #d4ac0d;padding:.7rem;background:#fffbea}}
-</style></head><body><main><h1>ReviewBus: {html.escape(str(report['repository']['full_name']))}</h1>
+body{{font:16px/1.5 system-ui,sans-serif;max-width:1100px;margin:2rem auto;padding:0 1rem;color:#17202a;background:#fff}}table{{border-collapse:collapse;width:100%;margin:0}}th,td{{border:1px solid #697176;padding:.45rem;text-align:left}}th{{background:#e8edef}}code,pre{{background:#f1f3f4;padding:.2rem .35rem;overflow:auto}}a{{color:#174f78}}a:focus-visible,.table-wrap:focus-visible{{outline:3px solid #6c3483;outline-offset:3px}}.warning{{border-left:.4rem solid #8a6d00;padding:.7rem;background:#fffbea}}.skip-link{{position:absolute;left:-10000px;top:auto}}.skip-link:focus{{left:1rem;top:1rem;background:#fff;padding:.5rem;z-index:1}}.table-wrap{{overflow-x:auto;margin:1rem 0}}@media(forced-colors:active){{.warning{{border-left-color:CanvasText}}}}
+</style></head><body><a class="skip-link" href="#content">Skip to report content</a><header><h1>ReviewBus: {html.escape(str(report['repository']['full_name']))}</h1></header><main id="content">
 <p>{summary['pull_requests']} pull requests · {summary['paths']} paths · {summary['reviewers']} reviewers · {summary['unowned_paths']} unowned paths</p>
 <p>Repository review-authority bus factor (80%): <strong>{summary['review_authority_bus_factor_80']}</strong></p>
 <p class="warning">Historical public review activity is not formal ownership, availability, employment, or performance. Correct these suggestions before use.</p>
-<h2>Path ↔ reviewer map</h2><table><thead><tr><th>Path</th><th>Events</th><th>Bus factor</th><th>Suggestions</th><th>Unowned</th></tr></thead><tbody>{''.join(path_rows)}</tbody></table>
-<h2>Reviewer metrics</h2><table><thead><tr><th>Reviewer</th><th>Events</th><th>Paths</th><th>Avg response hours</th><th>UTC activity span</th></tr></thead><tbody>{''.join(reviewer_rows)}</tbody></table>
-<h2>Suggested CODEOWNERS</h2><pre>{html.escape(codeowners_text(report))}</pre>
+<section aria-labelledby="path-map-heading"><h2 id="path-map-heading">Path ↔ reviewer map</h2><div class="table-wrap" role="region" aria-label="Scrollable path and reviewer metrics" tabindex="0"><table><caption>Observed review authority by changed path</caption><thead><tr><th scope="col">Path</th><th scope="col">Events</th><th scope="col">Bus factor</th><th scope="col">Suggestions</th><th scope="col">Unowned</th></tr></thead><tbody>{''.join(path_rows)}</tbody></table></div></section>
+<section aria-labelledby="reviewer-heading"><h2 id="reviewer-heading">Reviewer metrics</h2><div class="table-wrap" role="region" aria-label="Scrollable reviewer metrics" tabindex="0"><table><caption>Observed reviewer activity in the analyzed sample</caption><thead><tr><th scope="col">Reviewer</th><th scope="col">Events</th><th scope="col">Paths</th><th scope="col">Avg response hours</th><th scope="col">UTC activity span</th></tr></thead><tbody>{''.join(reviewer_rows)}</tbody></table></div></section>
+<section aria-labelledby="owners-heading"><h2 id="owners-heading">Suggested CODEOWNERS</h2><pre><code>{html.escape(codeowners_text(report))}</code></pre></section>
 </main></body></html>
 """
 
@@ -361,6 +361,7 @@ def fetch_public_repository(full_name: str, limit: int = 25, token: str | None =
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="reviewbus", description=__doc__)
+    parser.add_argument("--version", action="version", version=f"%(prog)s {VERSION}")
     subparsers = parser.add_subparsers(dest="command", required=True)
     analyze = subparsers.add_parser("analyze", help="analyze an offline GitHub-shaped JSON bundle")
     analyze.add_argument("--input", required=True, help="input path, or - for stdin")

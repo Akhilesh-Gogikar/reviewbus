@@ -84,8 +84,22 @@ class ReviewBusTests(unittest.TestCase):
             )
             self.assertEqual(0, result.returncode, result.stderr)
             self.assertEqual(3, json.loads(json_path.read_text(encoding="utf-8"))["summary"]["paths"])
-            self.assertIn("Path ↔ reviewer map", html_path.read_text(encoding="utf-8"))
+            rendered = html_path.read_text(encoding="utf-8")
+            self.assertIn("Path ↔ reviewer map", rendered)
+            self.assertIn('class="skip-link"', rendered)
+            self.assertIn("<caption>", rendered)
+            self.assertNotIn("<script", rendered.lower())
             self.assertIn("/src/core.py @bob @carol", owners_path.read_text(encoding="utf-8"))
+
+    def test_top_level_version_does_not_require_a_subcommand(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "reviewbus.py"), "--version"],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual("reviewbus 0.1.0\n", result.stdout)
 
 
 if __name__ == "__main__":
