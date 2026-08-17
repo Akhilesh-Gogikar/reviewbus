@@ -1,24 +1,34 @@
 # Roadmap
 
-This roadmap communicates direction, not a delivery promise.
+This roadmap communicates scope and sequencing, not delivery dates. Reproducibility, inspectability, privacy, and responsible interpretation outrank metric count.
 
-## 0.1 — Reproducible public-metadata proof
+## Shipped in 0.1
 
-- Offline GitHub-shaped bundles and optional bounded public fetching.
-- Deterministic reviewer/path metrics, 80% review-authority bus factor, unowned paths, and suggestions.
-- Accessible static HTML and correction-friendly CODEOWNERS output.
+- Offline public-shaped bundles and optional bounded public fetching.
+- Deterministic path/reviewer events, latency/UTC activity, concentration, unowned paths, and 80% review-authority bus factor.
+- JSON, accessible static HTML, correction-friendly CODEOWNERS suggestions, and installable CLI packaging.
 
-## Candidate 0.2 work
+## Next: sample transparency and corrections for 0.2
 
-- Versioned correction/override files that remain separate from observed history.
-- Rename-aware path grouping and explicit sample-window metadata.
-- Pagination with deterministic caching and rate-limit diagnostics.
-- More useful response-time distributions without inferring location.
+- Include explicit PR/sample bounds in reports.
+- Add median response time while preserving raw count/context.
+- Design a separate, versioned corrections file for reviewer aliases and suggested owners.
+- Paginate public fetching with deterministic caps and complete snapshot metadata.
+
+These map to [issue seeds 1–4](docs/ISSUE_SEEDS.md). Fixture, wording, accessibility, and small diagnostic improvements are welcome now.
+
+## Explore after corrections are inspectable
+
+- Rename-aware path continuity using public file metadata.
+- Explicit path grouping rules that never silently merge subsystems.
+- Versioned migrations for metric/input schema changes informed by public feedback.
+
+See [issue seed 5](docs/ISSUE_SEEDS.md). Exploration does not promise inclusion.
 
 ## Before 1.0
 
-- Stabilize input/report schemas after feedback from public maintainers.
+- Stabilize input/report schemas and metric definitions.
 - Validate responsible-use language and accessibility with independent reviewers.
-- Publish a deprecation window and migration tooling.
+- Publish a deprecation window and migrations for intentional breaks.
 
-Private repository scanning, employee scoring, and automatic reviewer assignment remain out of scope.
+Private repository scanning, employee scoring, location inference, automatic reviewer assignment, and governance actions remain out of scope.

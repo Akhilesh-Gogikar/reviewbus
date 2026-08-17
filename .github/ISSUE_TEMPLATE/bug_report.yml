@@ -13,6 +13,13 @@ body:
       placeholder: "0.1.0"
     validations:
       required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "python3 --version"
+    validations:
+      required: true
   - type: dropdown
     id: platform
     attributes:
@@ -33,10 +40,24 @@ body:
       label: Expected and actual result
     validations:
       required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sample and metric context
+      description: State PR/path/reviewer counts and the affected metric using invented names only.
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Redacted diagnostics
+      description: Include exit code and relevant output; remove tokens and real person/repository details if sensitive.
   - type: checkboxes
     id: safety
     attributes:
       label: Safety check
       options:
         - label: I removed private repository, credential, employment, partner, customer, and sensitive person data.
+          required: true
+        - label: I checked the metric limitations, troubleshooting guide, and issue seeds.
           required: true

@@ -3,3 +3,9 @@ contact_links:
   - name: Private security report
     url: https://github.com/akigogikar/reviewbus/security/advisories/new
     about: Report vulnerabilities or sensitive repository/person data privately.
+  - name: Support and troubleshooting
+    url: https://github.com/akigogikar/reviewbus/blob/main/SUPPORT.md
+    about: Check support boundaries and common metric/fetch diagnostics before filing.
+  - name: Contributor issue seeds
+    url: https://github.com/akigogikar/reviewbus/blob/main/docs/ISSUE_SEEDS.md
+    about: Start with one of five scoped, code-aware contributions.
