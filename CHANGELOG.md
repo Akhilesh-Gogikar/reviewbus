@@ -11,4 +11,4 @@ All notable changes are recorded here. The project follows Semantic Versioning a
 - Static HTML, JSON, and correction-friendly CODEOWNERS suggestions.
 - Synthetic fixture and standard-library tests.
 
-[0.1.0]: https://github.com/akigogikar/reviewbus/releases/tag/v0.1.0
+[0.1.0]: https://github.com/Akhilesh-Gogikar/reviewbus/releases/tag/v0.1.0

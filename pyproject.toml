@@ -25,9 +25,9 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/akigogikar/reviewbus"
-Issues = "https://github.com/akigogikar/reviewbus/issues"
-Documentation = "https://github.com/akigogikar/reviewbus/tree/main/docs"
+Homepage = "https://github.com/Akhilesh-Gogikar/reviewbus"
+Issues = "https://github.com/Akhilesh-Gogikar/reviewbus/issues"
+Documentation = "https://github.com/Akhilesh-Gogikar/reviewbus/tree/main/docs"
 
 [project.scripts]
 reviewbus = "reviewbus:main"

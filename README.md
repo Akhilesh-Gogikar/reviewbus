@@ -1,7 +1,7 @@
 # ReviewBus
 
-[![CI](https://github.com/akigogikar/reviewbus/actions/workflows/ci.yml/badge.svg)](https://github.com/akigogikar/reviewbus/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/github/license/akigogikar/reviewbus)](LICENSE)
+[![CI](https://github.com/Akhilesh-Gogikar/reviewbus/actions/workflows/ci.yml/badge.svg)](https://github.com/Akhilesh-Gogikar/reviewbus/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/github/license/Akhilesh-Gogikar/reviewbus)](LICENSE)
 
 ![ReviewBus social preview: review paths connected as a transit map](docs/assets/social-preview.png)
 
@@ -21,7 +21,7 @@ ReviewBus turns public pull-request files and submitted reviews into reproducibl
 ## Copy-paste demo
 
 ```sh
-git clone https://github.com/akigogikar/reviewbus.git
+git clone https://github.com/Akhilesh-Gogikar/reviewbus.git
 cd reviewbus
 python3 -m venv .venv
 . .venv/bin/activate

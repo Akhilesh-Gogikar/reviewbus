@@ -6,6 +6,6 @@ Do not use project spaces to shame maintainers, speculate about employment or av
 
 Maintainers may edit or remove contributions, pause discussions, or restrict participation when needed to protect the community. Enforcement should be proportionate, documented privately, and avoid public shaming.
 
-Report conduct concerns privately through a verified contact method on the maintainer profile at <https://github.com/akigogikar>. Share only necessary information. Vulnerabilities and sensitive repository data use [SECURITY.md](SECURITY.md).
+Report conduct concerns privately through a verified contact method on the maintainer profile at <https://github.com/Akhilesh-Gogikar>. Share only necessary information. Vulnerabilities and sensitive repository data use [SECURITY.md](SECURITY.md).
 
 This policy applies in repository spaces and when someone represents the project publicly.
