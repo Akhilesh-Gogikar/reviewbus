@@ -1,4 +1,4 @@
-# Akigogikar OSS ecosystem
+# Akhilesh Gogikar OSS ecosystem
 
 These links are optional and informational. ReviewBus does not require, bundle, endorse, or exchange data with any other listed tool. Each project has an independent scope, lifecycle, security posture, and installation path.
 
