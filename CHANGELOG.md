@@ -8,8 +8,8 @@ All notable changes are recorded here. The project follows Semantic Versioning a
 
 ### Changed
 
-- `fetch` snapshots keep only `APPROVED` and `CHANGES_REQUESTED` reviews, the only states the analysis uses; comment-only and pending reviews are no longer stored.
-- JSON methodology and the HTML reviewer table state that response hours run from pull-request creation and that per-reviewer figures are not a performance, responsiveness, or availability measure.
+- `fetch` snapshots keep only `APPROVED` and `CHANGES_REQUESTED` reviews, the only states the analysis uses; comment-only and pending reviews are no longer stored. Analysis results from fetched snapshots are unchanged.
+- JSON methodology and the HTML reviewer table state that response hours run from pull-request creation to each reviewer's latest qualifying review and that per-reviewer figures are not a performance, responsiveness, or availability measure.
 - Replace fixture and test logins that matched real GitHub accounts with clearly synthetic handles.
 - Document the personal data in snapshots and reports, responsible-use limits, and CODEOWNERS consent in the privacy guide.
 - Move the repository to `Akhilesh-Gogikar`, keep maintainer launch planning out of the repository, and list related tools only after they are public.

@@ -65,12 +65,15 @@ class ProjectMetadataTests(unittest.TestCase):
         # ponytail: catches links and ECOSYSTEM entries, not a bare unlinked name elsewhere.
         linked = set()
         for document in sorted(ROOT.rglob("*")):
-            if not document.is_file() or {".git", ".venv", "venv", "build", "dist"} & set(document.parts):
+            folders = document.relative_to(ROOT).parts[:-1]
+            if not document.is_file() or {"venv", "build", "dist", "node_modules"} & set(folders):
                 continue
-            if document.suffix in {".md", ".py", ".toml", ".yml", ".json", ".svg"}:
+            if any(part.startswith(".") and part != ".github" for part in folders):
+                continue
+            if document.suffix in {".md", ".py", ".toml", ".yml", ".yaml", ".json", ".svg", ".txt", ".html", ".rst"}:
                 body = document.read_text(encoding="utf-8")
-                linked |= set(re.findall(r"github\.com/Akhilesh-Gogikar/([A-Za-z0-9_.-]+)", body))
-        self.assertEqual(set(), {repo.rstrip(".").removesuffix(".git") for repo in linked} - public)
+                linked |= set(re.findall(r"(?i)github\.com/Akhilesh-Gogikar/([A-Za-z0-9_.-]+)", body))
+        self.assertEqual(set(), {repo.lower().rstrip(".").removesuffix(".git") for repo in linked} - public)
 
     def test_issue_seeds_are_actionable(self):
         text = (ROOT / "docs/ISSUE_SEEDS.md").read_text(encoding="utf-8")
