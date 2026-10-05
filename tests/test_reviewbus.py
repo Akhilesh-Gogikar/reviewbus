@@ -25,7 +25,7 @@ class ReviewBusTests(unittest.TestCase):
         self.assertEqual(2, report["summary"]["review_authority_bus_factor_80"])
         paths = {row["path"]: row for row in report["paths"]}
         self.assertEqual(2, paths["src/core.py"]["review_authority_bus_factor_80"])
-        self.assertEqual(["bob", "carol"], paths["src/core.py"]["suggested_reviewers"])
+        self.assertEqual(["fixture-reviewer-a", "fixture-reviewer-b"], paths["src/core.py"]["suggested_reviewers"])
         self.assertTrue(paths["scripts/release.py"]["unowned"])
         self.assertIn("# /scripts/release.py needs an owner", report["suggested_codeowners"])
 
@@ -53,11 +53,16 @@ class ReviewBusTests(unittest.TestCase):
             {"full_name": "octocat/Hello-World", "private": False},
             [{"number": 7, "created_at": "2026-01-01T00:00:00Z", "user": {"login": "octocat"}}],
             [{"filename": "README.md"}],
-            [{"user": {"login": "reviewer"}, "state": "APPROVED", "submitted_at": "2026-01-01T01:00:00Z"}],
+            [
+                {"user": {"login": "fixture-reviewer-c"}, "state": "APPROVED", "submitted_at": "2026-01-01T01:00:00Z"},
+                {"user": {"login": "fixture-reviewer-a"}, "state": "COMMENTED", "submitted_at": "2026-01-01T02:00:00Z"},
+            ],
         ]
         snapshot = reviewbus.fetch_public_repository("octocat/Hello-World", limit=1)
         self.assertEqual("octocat/Hello-World", snapshot["repository"]["full_name"])
         self.assertEqual("README.md", snapshot["pull_requests"][0]["files"][0]["filename"])
+        # Comment-only reviews are not analyzed, so the snapshot does not keep them.
+        self.assertEqual(["fixture-reviewer-c"], [review["user"]["login"] for review in snapshot["pull_requests"][0]["reviews"]])
         self.assertEqual(4, github_json.call_count)
 
     def test_cli_writes_all_static_artifacts(self):
@@ -89,7 +94,8 @@ class ReviewBusTests(unittest.TestCase):
             self.assertIn('class="skip-link"', rendered)
             self.assertIn("<caption>", rendered)
             self.assertNotIn("<script", rendered.lower())
-            self.assertIn("/src/core.py @bob @carol", owners_path.read_text(encoding="utf-8"))
+            self.assertIn("not a performance, responsiveness, or availability measure", rendered)
+            self.assertIn("/src/core.py @fixture-reviewer-a @fixture-reviewer-b", owners_path.read_text(encoding="utf-8"))
 
     def test_top_level_version_does_not_require_a_subcommand(self):
         result = subprocess.run(
@@ -99,7 +105,7 @@ class ReviewBusTests(unittest.TestCase):
             text=True,
         )
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertEqual("reviewbus 0.1.0\n", result.stdout)
+        self.assertEqual("reviewbus 0.1.1\n", result.stdout)
 
 
 if __name__ == "__main__":

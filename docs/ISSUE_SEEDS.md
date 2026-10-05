@@ -1,12 +1,12 @@
 # Issue seeds
 
-These are ready-to-file proposals, not promises. Confirm the code still matches each seed before creating the issue. All tests and examples must use invented public-shaped data.
+These seeds are filed as issues #4–#8 in the `v0.2 — community evidence` milestone. They are scoped proposals, not promises; the live issue is authoritative for scope and labels. Keep the numbered headings stable because each issue links back to its seed. All tests and examples must use invented public-shaped data.
 
 ## 1. Show the analyzed pull-request bounds
 
-**Proposed title:** `Add explicit pull-request sample bounds to every ReviewBus report`
+**Issue:** [#4](https://github.com/Akhilesh-Gogikar/reviewbus/issues/4)
 
-**Labels:** `good first issue`, `help wanted`, `reporting`
+**Labels:** `good first issue`, `help wanted`, `reporting`, `difficulty: beginner`, `mentored`, `size: S`, `status: ready`
 
 **Rationale:** `summary.pull_requests` gives a count but not the minimum/maximum PR number in the bundle. Reviewers need basic sample context before interpreting an unowned path or concentration value.
 
@@ -18,13 +18,13 @@ These are ready-to-file proposals, not promises. Confirm the code still matches 
 
 ## 2. Add median response time beside the mean
 
-**Proposed title:** `Report median review response hours without hiding sample counts`
+**Issue:** [#5](https://github.com/Akhilesh-Gogikar/reviewbus/issues/5)
 
-**Labels:** `good first issue`, `help wanted`, `metrics`
+**Labels:** `good first issue`, `help wanted`, `metrics`, `responsible-use`, `difficulty: beginner`, `mentored`, `size: M`, `status: ready`
 
 **Rationale:** the arithmetic mean is sensitive to long tails. A median is useful only when the number of qualifying events remains visible and empty samples remain explicit.
 
-**Acceptance criteria:** implement a small standard-library median helper; add path/reviewer median fields without removing mean/count; use `null` for no events; define rounding and deterministic behavior in methodology.
+**Acceptance criteria:** implement a small standard-library median helper; add path-level median fields without removing mean/count; do not add new per-reviewer timing statistics; use `null` for no events; define rounding and deterministic behavior in methodology.
 
 **Test plan:** table-driven odd/even/empty/duplicate values, integration against the fixture, JSON determinism, and HTML text assertions.
 
@@ -32,9 +32,9 @@ These are ready-to-file proposals, not promises. Confirm the code still matches 
 
 ## 3. Design a separate corrections file
 
-**Proposed title:** `Add versioned reviewer-alias and path-owner corrections without rewriting observations`
+**Issue:** [#6](https://github.com/Akhilesh-Gogikar/reviewbus/issues/6)
 
-**Labels:** `help wanted`, `design needed`, `responsible-use`
+**Labels:** `help wanted`, `design needed`, `responsible-use`, `difficulty: intermediate`, `size: M`, `status: ready`
 
 **Rationale:** renamed accounts and maintainer corrections should improve suggestions without erasing what the public snapshot contained.
 
@@ -46,9 +46,9 @@ These are ready-to-file proposals, not promises. Confirm the code still matches 
 
 ## 4. Paginate public fetches with explicit caps
 
-**Proposed title:** `Add deterministic public-fetch pagination and snapshot completeness metadata`
+**Issue:** [#7](https://github.com/Akhilesh-Gogikar/reviewbus/issues/7)
 
-**Labels:** `help wanted`, `advanced`, `fetch`
+**Labels:** `help wanted`, `advanced`, `fetch`, `difficulty: advanced`, `size: L`, `status: ready`
 
 **Rationale:** 0.1 reads one page per endpoint. Larger public repositories can produce silently incomplete file/review lists unless the snapshot records that ceiling.
 
@@ -60,9 +60,9 @@ These are ready-to-file proposals, not promises. Confirm the code still matches 
 
 ## 5. Carry path renames through the graph
 
-**Proposed title:** `Model public file renames without silently merging unrelated paths`
+**Issue:** [#8](https://github.com/Akhilesh-Gogikar/reviewbus/issues/8)
 
-**Labels:** `advanced`, `metrics`, `compatibility`
+**Labels:** `advanced`, `metrics`, `compatibility`, `difficulty: advanced`, `size: L`, `status: ready`
 
 **Rationale:** file history can split when a public change reports `previous_filename`. Continuity is useful, but a naive merge can combine unrelated files or make reports order-dependent.
 

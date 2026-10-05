@@ -18,7 +18,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 API_ROOT = "https://api.github.com"
 AUTHORITY_STATES = {"APPROVED", "CHANGES_REQUESTED"}
 LOGIN_RE = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
@@ -241,6 +241,8 @@ def analyze_bundle(data: object) -> dict[str, object]:
         "methodology": {
             "authority_states": sorted(AUTHORITY_STATES),
             "bus_factor": "minimum reviewers accounting for at least 80% of qualifying path-review events",
+            "response_hours": "hours from pull-request creation to each reviewer's latest qualifying review on that pull request; not time to first response and not measured from a review request",
+            "reviewer_metrics": "Per-reviewer figures describe this sample only; they are not a performance, responsiveness, or availability measure. Share path-level summary fields (authority_events, reviewer_count, review_authority_bus_factor_80, top_reviewer_share, concentration_hhi, unowned) rather than reviewer rows.",
             "warning": "Historical public review activity is not formal ownership, availability, employment, or performance.",
         },
     }
@@ -285,7 +287,7 @@ body{{font:16px/1.5 system-ui,sans-serif;max-width:1100px;margin:2rem auto;paddi
 <p>Repository review-authority bus factor (80%): <strong>{summary['review_authority_bus_factor_80']}</strong></p>
 <p class="warning">Historical public review activity is not formal ownership, availability, employment, or performance. Correct these suggestions before use.</p>
 <section aria-labelledby="path-map-heading"><h2 id="path-map-heading">Path ↔ reviewer map</h2><div class="table-wrap" role="region" aria-label="Scrollable path and reviewer metrics" tabindex="0"><table><caption>Observed review authority by changed path</caption><thead><tr><th scope="col">Path</th><th scope="col">Events</th><th scope="col">Bus factor</th><th scope="col">Suggestions</th><th scope="col">Unowned</th></tr></thead><tbody>{''.join(path_rows)}</tbody></table></div></section>
-<section aria-labelledby="reviewer-heading"><h2 id="reviewer-heading">Reviewer metrics</h2><div class="table-wrap" role="region" aria-label="Scrollable reviewer metrics" tabindex="0"><table><caption>Observed reviewer activity in the analyzed sample</caption><thead><tr><th scope="col">Reviewer</th><th scope="col">Events</th><th scope="col">Paths</th><th scope="col">Avg response hours</th><th scope="col">UTC activity span</th></tr></thead><tbody>{''.join(reviewer_rows)}</tbody></table></div></section>
+<section aria-labelledby="reviewer-heading"><h2 id="reviewer-heading">Reviewer metrics</h2><div class="table-wrap" role="region" aria-label="Scrollable reviewer metrics" tabindex="0"><table><caption>Observed reviewer activity in the analyzed sample. Response hours run from pull-request creation to each reviewer's latest qualifying review, not from a review request. These figures are not a performance, responsiveness, or availability measure.</caption><thead><tr><th scope="col">Reviewer</th><th scope="col">Events</th><th scope="col">Paths</th><th scope="col">Avg response hours</th><th scope="col">UTC activity span</th></tr></thead><tbody>{''.join(reviewer_rows)}</tbody></table></div></section>
 <section aria-labelledby="owners-heading"><h2 id="owners-heading">Suggested CODEOWNERS</h2><pre><code>{html.escape(codeowners_text(report))}</code></pre></section>
 </main></body></html>
 """
@@ -349,7 +351,9 @@ def fetch_public_repository(full_name: str, limit: int = 25, token: str | None =
                         "state": item.get("state"),
                         "submitted_at": item.get("submitted_at"),
                     }
-                    for item in reviews if isinstance(reviews, list) and isinstance(item, dict)
+                    for item in reviews
+                    # Keep only reviews the analysis can use; drop comment-only and pending activity.
+                    if isinstance(item, dict) and str(item.get("state", "")).upper() in AUTHORITY_STATES
                 ] if isinstance(reviews, list) else [],
             }
         )

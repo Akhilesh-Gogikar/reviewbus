@@ -9,7 +9,7 @@
 
 ReviewBus turns public pull-request files and submitted reviews into reproducible path ↔ reviewer maps, concentration metrics, unowned-path evidence, and correction-friendly suggestions.
 
-**Status:** 0.1.0 alpha. Source installation is supported; no package registry publication has occurred. Historical public activity is not formal ownership, current availability, employment, expertise, or performance.
+**Status:** 0.1.1 alpha. Source installation is supported; no package registry publication has occurred. Historical public activity is not formal ownership, current availability, employment, expertise, or performance.
 
 ## Why ReviewBus
 
@@ -45,7 +45,7 @@ reviewbus analyze --input /tmp/public-snapshot.json --json /tmp/reviewbus.json -
 
 - the latest qualifying `APPROVED` or `CHANGES_REQUESTED` review by a non-author, attributed to each changed path;
 - the minimum reviewers accounting for 80% of qualifying path-review events;
-- reviewer/path counts, average response time, and UTC activity span;
+- reviewer/path counts, average response time from pull-request creation, and UTC activity span;
 - paths with no qualifying event in the sample; and
 - deterministic top-two reviewer and CODEOWNERS suggestions.
 
@@ -64,7 +64,7 @@ ReviewBus supports Python 3.10–3.14 and has no runtime dependencies. CI tests 
 ## Project navigation
 
 - Design: [architecture](docs/ARCHITECTURE.md), [privacy](docs/PRIVACY.md), and [accessibility](docs/ACCESSIBILITY.md)
-- Direction: [roadmap](ROADMAP.md), [launch kit](docs/LAUNCH_KIT.md), and [governance](GOVERNANCE.md)
+- Direction: [roadmap](ROADMAP.md) and [governance](GOVERNANCE.md)
 - Participate: [contributing](CONTRIBUTING.md), [code of conduct](CODE_OF_CONDUCT.md), and [issue seeds](docs/ISSUE_SEEDS.md)
 - Boundaries: [scope](SCOPE.md), [provenance](PROVENANCE.md), and [optional ecosystem](ECOSYSTEM.md)
 
