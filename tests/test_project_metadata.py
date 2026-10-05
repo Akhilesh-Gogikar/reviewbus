@@ -15,7 +15,7 @@ class ProjectMetadataTests(unittest.TestCase):
             "LICENSE", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "SECURITY.md", "SUPPORT.md",
             "GOVERNANCE.md", "ROADMAP.md", "CHANGELOG.md", "ECOSYSTEM.md", "docs/ARCHITECTURE.md",
             "docs/TROUBLESHOOTING.md", "docs/API_STABILITY.md", "docs/PRIVACY.md", "docs/ACCESSIBILITY.md",
-            "docs/LAUNCH_KIT.md", "docs/ISSUE_SEEDS.md", ".github/dependabot.yml", ".github/workflows/ci.yml",
+            "docs/ISSUE_SEEDS.md", ".github/dependabot.yml", ".github/workflows/ci.yml",
             ".github/workflows/release.yml", ".github/pull_request_template.md",
             ".github/CODEOWNERS",
         }
@@ -52,16 +52,29 @@ class ProjectMetadataTests(unittest.TestCase):
                     missing.append(f"{document.relative_to(ROOT)} -> {target}")
         self.assertEqual([], missing)
 
-    def test_ecosystem_is_complete_and_informational(self):
+    def test_ecosystem_lists_only_public_tools(self):
+        public = {"reviewbus", "releasefence"}
         text = (ROOT / "ECOSYSTEM.md").read_text(encoding="utf-8")
-        tools = {"releasefence", "semver-weather", "reviewbus", "sdk-wirediff", "tokenflame", "mcp-client-autopsy", "directivegraph"}
-        for tool in tools:
-            self.assertIn(f"https://github.com/Akhilesh-Gogikar/{tool}", text)
         self.assertIn("optional and informational", text)
+        listed = re.findall(r"(?m)^- \[([^\]]+)\]\(https://github\.com/Akhilesh-Gogikar/([^)/]+)\)", text)
+        self.assertEqual(public, {name for name, _ in listed})
+        self.assertEqual(public, {repo for _, repo in listed})
+        self.assertEqual(len(public), text.count("\n- "))
+        # Unreleased sibling tools must not be named until they are public, so this guard uses an
+        # allowlist of owner repositories instead of naming the unreleased ones.
+        # ponytail: catches links and ECOSYSTEM entries, not a bare unlinked name elsewhere.
+        linked = set()
+        for document in sorted(ROOT.rglob("*")):
+            if not document.is_file() or {".git", ".venv", "venv", "build", "dist"} & set(document.parts):
+                continue
+            if document.suffix in {".md", ".py", ".toml", ".yml", ".json", ".svg"}:
+                body = document.read_text(encoding="utf-8")
+                linked |= set(re.findall(r"github\.com/Akhilesh-Gogikar/([A-Za-z0-9_.-]+)", body))
+        self.assertEqual(set(), {repo.rstrip(".").removesuffix(".git") for repo in linked} - public)
 
     def test_issue_seeds_are_actionable(self):
         text = (ROOT / "docs/ISSUE_SEEDS.md").read_text(encoding="utf-8")
-        self.assertEqual(5, text.count("**Proposed title:**"))
+        self.assertEqual(5, text.count("**Issue:** [#"))
         for field in ("**Labels:**", "**Rationale:**", "**Acceptance criteria:**", "**Test plan:**", "**Skills:**", "**Estimated scope:**", "**Likely files:**"):
             self.assertEqual(5, text.count(field), field)
 

@@ -7,7 +7,7 @@ Contributor count hides the smaller set of people who can safely review and merg
 ## v0 boundary
 
 - Build a path-to-reviewer bipartite graph from public GitHub metadata.
-- Measure review concentration, unowned paths, response latency, timezone handoffs, and review-authority bus factor.
+- Measure review concentration, unowned paths, response latency, descriptive UTC activity span (no timezone or location inference), and review-authority bus factor.
 - Render a correction-friendly static report and optional CODEOWNERS suggestions.
 
 ## Explicit non-goals

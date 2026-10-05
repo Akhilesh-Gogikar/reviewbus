@@ -11,7 +11,7 @@ This roadmap communicates scope and sequencing, not delivery dates. Reproducibil
 ## Next: sample transparency and corrections for 0.2
 
 - Include explicit PR/sample bounds in reports.
-- Add median response time while preserving raw count/context.
+- Add path-level median response time while preserving raw count/context.
 - Design a separate, versioned corrections file for reviewer aliases and suggested owners.
 - Paginate public fetching with deterministic caps and complete snapshot metadata.
 
@@ -31,4 +31,4 @@ See [issue seed 5](docs/ISSUE_SEEDS.md). Exploration does not promise inclusion.
 - Validate responsible-use language and accessibility with independent reviewers.
 - Publish a deprecation window and migrations for intentional breaks.
 
-Private repository scanning, employee scoring, location inference, automatic reviewer assignment, and governance actions remain out of scope.
+Private repository scanning, employee scoring, location inference, leaderboards or cross-repository indexes that name individual reviewers, automatic reviewer assignment, and governance actions remain out of scope.
